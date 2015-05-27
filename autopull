@@ -42,7 +42,8 @@ PR=$(cat <<EOF
   "base": "$AP_BRANCH",
   "head": "$BRANCH"
 }
-EOF)
+EOF
+)
 
 curl -sS -i \
 --header "Authorization: token ${GH_TOKEN}" \
