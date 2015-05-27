@@ -11,12 +11,12 @@ AP_CMD=${AP_CMD:=make update}
 
 REPO_URL="https://github.com/${AP_REPO}.git"
 CREATE_PR_URL="https://api.github.com/repos/${AP_REPO}/pulls"
-DATE="$(date -u +%Y-%m-%d-%H-%M-%S)"
-BRANCH="data-${DATE}"
+DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+BRANCH="autopull/${AP_BRANCH}/$(date -u +%Y-%m-%dT%H-%M-%SZ)"
 DIR="${TMPDIR}/autopull/${DATE}"
 REPO_DIR="${DIR}/${AP_REPO}"
 LOG="${DIR}/cmd.log"
-JSON="${DIR}/pull-request.json"
+JSON="${DIR}/pull-request.JSONson"
 
 echo "Repository: $AP_REPO"
 echo "Branch:     $AP_BRANCH"
@@ -30,15 +30,13 @@ git checkout $AP_BRANCH
 git checkout -q -b $BRANCH
 $AP_CMD 2>&1 > $LOG
 LOG_DATA=`cat $LOG`
-git diff
 git add $AP_FILES
-git commit -m "Auto update: $DATE\n\n$LOG_DATA"
+git commit -m "$(echo "autopull: ${DATE}\n\n${AP_CMD}\n\n${LOG_DATA}")"
 git push origin $BRANCH:$BRANCH
 
 PR=$(cat <<EOF
 {
-  "title": "Automated data update $DATE",
-  "body": "$LOG_DATA",
+  "title": "autopull: $DATE",
   "base": "$AP_BRANCH",
   "head": "$BRANCH"
 }
@@ -50,5 +48,8 @@ curl -sS -i \
 --request POST ${CREATE_PR_URL} > $JSON
 
 grep -q "201 Created" $JSON || (cat $JSON && exit 1)
-echo Created "$(grep -A1 '"self": {' $JSON | grep href | cut -f 2- -d ':')"
+API_URL=$(grep -A1 '"self": {' $JSON | grep href | cut -f 2- -d ':' | cut -f 2 -d '"')
+PULL_ID=$(echo $API_URL | cut -f 8- -d / )
+PR_URL="https://github.com/${AP_REPO}/pull/${PULL_ID}"
+echo "Created pull request $PULL_ID: $PR_URL"
 )
