@@ -3,9 +3,6 @@
 set -e
 set -u
 
-test -n "$GH_TOKEN"
-test -n "$AP_REPO"
-
 TMPDIR=${TMPDIR:=/tmp}
 test -d $TMPDIR
 
@@ -14,7 +11,7 @@ AP_FILES=${AP_FILES:=.}
 AP_CMD=${AP_CMD:=make update}
 
 REPO_URL="https://github.com/${AP_REPO}.git"
-CREATE_PR_URL="https://api.github.com/repos/${AP_REPO}/pulls"
+CREATE_PR_URL="https://${GH_USER}:${GH_TOKEN}@api.github.com/repos/${AP_REPO}/pulls"
 DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 BRANCH="autopull/${AP_BRANCH}/$(date -u +%Y-%m-%dT%H-%M-%SZ)"
 DIR="${TMPDIR}/autopull/${DATE}"
@@ -26,6 +23,7 @@ echo "Repository: $AP_REPO"
 echo "Branch:     $AP_BRANCH"
 echo "Files:      $AP_FILES"
 echo "Command:    $AP_CMD"
+echo "User:       $GH_USER"
 
 git clone $REPO_URL $REPO_DIR
 (
