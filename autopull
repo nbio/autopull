@@ -5,6 +5,10 @@ set -u
 
 test -n "$GH_TOKEN"
 test -n "$AP_REPO"
+
+TMPDIR=${TMPDIR:=/tmp}
+test -d $TMPDIR
+
 AP_BRANCH=${AP_BRANCH:=master}
 AP_FILES=${AP_FILES:=.}
 AP_CMD=${AP_CMD:=make update}
