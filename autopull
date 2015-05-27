@@ -30,7 +30,7 @@ git clone $REPO_URL $REPO_DIR
 cd $REPO_DIR
 git checkout $AP_BRANCH
 git checkout -q -b $BRANCH
-$($AP_CMD) 2>&1 > $LOG
+eval $AP_CMD 2>&1 > $LOG
 LOG_DATA=`cat $LOG`
 git add $AP_FILES
 git commit -m "$(echo -e "autopull: ${DATE}\n\n${AP_CMD}\n\n${LOG_DATA}")"
