@@ -1,0 +1,54 @@
+#!/usr/bin/env sh
+
+set -e
+set -u
+
+test -n "$GH_TOKEN"
+test -n "$AP_REPO"
+AP_BRANCH=${AP_BRANCH:=master}
+AP_FILES=${AP_FILES:=.}
+AP_CMD=${AP_CMD:=make update}
+
+REPO_URL="https://github.com/${AP_REPO}.git"
+CREATE_PR_URL="https://api.github.com/repos/${AP_REPO}/pulls"
+DATE="$(date -u +%Y-%m-%d-%H-%M-%S)"
+BRANCH="data-${DATE}"
+DIR="${TMPDIR}/autopull/${DATE}"
+REPO_DIR="${DIR}/${AP_REPO}"
+LOG="${DIR}/cmd.log"
+JSON="${DIR}/pull-request.json"
+
+echo "Repository: $AP_REPO"
+echo "Branch:     $AP_BRANCH"
+echo "Files:      $AP_FILES"
+echo "Command:    $AP_CMD"
+
+git clone $REPO_URL $REPO_DIR
+(
+cd $REPO_DIR
+git checkout $AP_BRANCH
+git checkout -q -b $BRANCH
+$AP_CMD 2>&1 > $LOG
+LOG_DATA=`cat $LOG`
+git diff
+git add $AP_FILES
+git commit -m "Auto update: $DATE\n\n$LOG_DATA"
+git push origin $BRANCH:$BRANCH
+
+PR=$(cat <<EOF
+{
+  "title": "Automated data update $DATE",
+  "body": "$LOG_DATA",
+  "base": "$AP_BRANCH",
+  "head": "$BRANCH"
+}
+EOF)
+
+curl -sS -i \
+--header "Authorization: token ${GH_TOKEN}" \
+--data "${PR}" \
+--request POST ${CREATE_PR_URL} > $JSON
+
+grep -q "201 Created" $JSON || (cat $JSON && exit 1)
+echo Created "$(grep -A1 '"self": {' $JSON | grep href | cut -f 2- -d ':')"
+)
