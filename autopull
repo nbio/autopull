@@ -33,7 +33,7 @@ git checkout -q -b $BRANCH
 eval $AP_CMD 2>&1 > $LOG
 LOG_DATA=`cat $LOG`
 git add $AP_FILES
-git commit -m "$(echo -e "autopull: ${DATE}\n\n${AP_CMD}\n\n${LOG_DATA}")"
+echo -e "autopull: ${DATE}\n\n${AP_CMD}\n\n${LOG_DATA}" | git commit -F -
 git push origin $BRANCH:$BRANCH
 
 PR=$(cat <<EOF
