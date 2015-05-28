@@ -11,6 +11,7 @@ This script uses several environment variables for configuration. Most must be s
 
 - `AP_REPO` — The GitHub repository, in the form of `user/repo`, e.g. `rails/rails`
 - `AP_BRANCH` — The branch to check out. Default: `master`
+- `AP_SETUP_CMD` — An optional command to run before running the update command.
 - `AP_CMD` — The update command to run that mutates the repository. Default: `make update`
 - `GH_USER` — The GitHub username (yours or a bot)
 - `GH_TOKEN` – The GitHub access token (not your password!)
