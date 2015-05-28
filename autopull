@@ -17,12 +17,11 @@ BRANCH="autopull/${AP_BRANCH}/$(date -u +%Y-%m-%dT%H-%M-%SZ)"
 DIR="${TMPDIR}/autopull/${DATE}"
 REPO_DIR="${DIR}/${AP_REPO}"
 LOG="${DIR}/cmd.log"
-JSON="${DIR}/pull-request.JSONson"
+JSON="${DIR}/pull-request.JSON"
 
 echo "Repository: $AP_REPO"
 echo "Branch:     $AP_BRANCH"
 echo "Files:      $AP_FILES"
-echo "Command:    $AP_CMD"
 echo "User:       $GH_USER"
 
 git clone $REPO_URL $REPO_DIR
@@ -30,7 +29,15 @@ git clone $REPO_URL $REPO_DIR
 cd $REPO_DIR
 git checkout $AP_BRANCH
 git checkout -q -b $BRANCH
+
+# Future configuration file?
+# AP_CONF=${AP_CONF:=autopull.conf}
+# test -f $AP_CONF && . $AP_CONF
+if [[ $AP_SETUP_CMD ]]; then
+	eval $AP_SETUP_CMD
+fi
 eval $AP_CMD 2>&1 > $LOG
+
 LOG_DATA=`cat $LOG`
 git add $AP_FILES
 echo -e "autopull: ${DATE}\n\n${AP_CMD}\n\n${LOG_DATA}" | git commit -F -
