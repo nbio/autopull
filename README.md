@@ -32,7 +32,7 @@ This script uses environment variables for configuration; most must be set. Exam
 1. Push your fork to Heroku: `git push {your Heroku app's git remote}`
 1. Test: `heroku run ./autopull -a {your Heroku app name}`
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/weppos/autopull)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/nbio/autopull)
 
 ## Python example
 
