@@ -1,7 +1,7 @@
 {
   "name": "autopull",
   "description": "Bash script that auto-creates Pull Requests for a given repo.",
-  "repository": "https://github.com/weppos/autopull",
+  "repository": "https://github.com/nbio/autopull",
   "keywords": ["github"],
   "env": {
     "AP_REPO": {
