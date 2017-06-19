@@ -35,7 +35,7 @@ git checkout -q -b $BRANCH
 # AP_CONF=${AP_CONF:=autopull.conf}
 # test -f $AP_CONF && . $AP_CONF
 if [[ $AP_SETUP_CMD ]]; then
-	eval $AP_SETUP_CMD
+	source $AP_SETUP_CMD
 fi
 eval $AP_CMD
 
