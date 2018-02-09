@@ -18,7 +18,7 @@ BRANCH="autopull/${AP_BRANCH}/${SAFE_DATE}"
 DIR="${TMPDIR}/autopull/${SAFE_DATE}"
 AP_REPO_DIR=${AP_REPO_DIR:="${DIR}/${AP_REPO}"}
 LOG="${DIR}/cmd.log"
-JSON="${DIR}/pull-request.JSON"
+JSON="${DIR}/pull-request.json"
 
 echo "Repository: $AP_REPO"
 echo "Branch:     $AP_BRANCH"
