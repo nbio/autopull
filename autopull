@@ -24,8 +24,10 @@ echo "Repository: $AP_REPO"
 echo "Branch:     $AP_BRANCH"
 echo "Files:      $AP_FILES"
 echo "User:       $GH_USER"
-echo "Directory:  $AP_REPO_DIR"
+echo "Work dir:   $DIR"
+echo "Repo dir:   $AP_REPO_DIR"
 
+mkdir -p $DIR
 git clone $REPO_URL $AP_REPO_DIR
 (
 cd $AP_REPO_DIR
