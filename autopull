@@ -16,7 +16,7 @@ DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 SAFE_DATE="$(date -u +%Y-%m-%d-%H-%M-%S)"
 BRANCH="autopull/${AP_BRANCH}/${SAFE_DATE}"
 DIR="${TMPDIR}/autopull/${SAFE_DATE}"
-REPO_DIR="${DIR}/${AP_REPO}"
+AP_REPO_DIR=${AP_REPO_DIR:="${DIR}/${AP_REPO}"}
 LOG="${DIR}/cmd.log"
 JSON="${DIR}/pull-request.JSON"
 
@@ -24,10 +24,11 @@ echo "Repository: $AP_REPO"
 echo "Branch:     $AP_BRANCH"
 echo "Files:      $AP_FILES"
 echo "User:       $GH_USER"
+echo "Directory:  $AP_REPO_DIR"
 
-git clone $REPO_URL $REPO_DIR
+git clone $REPO_URL $AP_REPO_DIR
 (
-cd $REPO_DIR
+cd $AP_REPO_DIR
 git checkout $AP_BRANCH
 git checkout -q -b $BRANCH
 
