@@ -42,7 +42,7 @@ if [[ $AP_SETUP_CMD ]]; then
 fi
 eval $AP_CMD
 
-git add $AP_FILES
+git add --all $AP_FILES
 echo -e "autopull: ${DATE}" | git commit -F -
 git push origin $BRANCH:$BRANCH
 
